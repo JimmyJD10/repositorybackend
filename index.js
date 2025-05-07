@@ -1,12 +1,9 @@
-require('dotenv').config()
-const http = require('http') 
+const http= require('http')
 
 function requestController(){
-    console.log('Bienvenidos al curso  JV')
+    console.log('Bienvenidos al curso')
 }
 
-const server = http.createServer(requestController)
-const PORT = process.env.PORT
-server.listen(PORT,function(){
-    console.log("aplicacion corrido en: " + PORT)
-})
+const server=http.createServer(requestController)
+
+server.listen(4000)
