@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Frontend JWT Simple</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 30px; }
+    input, button { margin: 5px 0; padding: 10px; width: 300px; }
+    .response { margin-top: 20px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h2>Login al Backend (JWT)</h2>
+  
+  <input type="text" id="email" placeholder="Correo electrónico">
+  <input type="password" id="password" placeholder="Contraseña">
+  <button onclick="login()">Iniciar sesión</button>
+
+  <h3>Ruta protegida</h3>
+  <button onclick="getProtected()">Consultar Ruta Protegida</button>
+
+  <div class="response" id="output"></div>
+
+  <script>
+    let token = '';
+
+    async function login() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      const response = await fetch('https://tu-backend.onrender.com/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await response.json();
+      document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+
+      if (data.token) {
+        token = data.token;
+        alert('Login exitoso. Token guardado');
+      } else {
+        alert('Error en login');
+      }
+    }
+
+    async function getProtected() {
+      if (!token) {
+        alert('Primero debes iniciar sesión');
+        return;
+      }
+
+      const response = await fetch('https://serviciowebbackend-h01j.onrender.com/protected', {
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      const data = await response.json();
+      document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+    }
+  </script>
+</body>
+</html>
