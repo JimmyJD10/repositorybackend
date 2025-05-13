@@ -1,6 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -9,6 +10,9 @@ const SECRET = 'clave_secreta_jwt';
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Servir archivos estáticos desde "public"
+app.use(express.static('public'));
 
 // Usuario de prueba
 const usuarios = [
@@ -47,6 +51,11 @@ app.get('/protected', (req, res) => {
       usuario: decoded.email
     });
   });
+});
+
+// Ruta opcional para mostrar el frontend
+app.get('/frontend', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
